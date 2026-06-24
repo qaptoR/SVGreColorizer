@@ -11,12 +11,17 @@ signal preview_image(path, data)
 @export var color_icon__ :Texture
 @export var color_bucket_icon__ :Texture
 @export var update_color_icon__ :Texture
+@export var icon_reload__ :Texture
 
 @onready var Tree_ :Tree = %Tree
 @onready var _Collapse_ :Button = %Collapse
 @onready var _Expand_ :Button = %Expand
+@onready var _Descending_ :CheckButton = %Descending
 
 var _DirPathLabel_ :Label
+var _Queue_ :ItemList
+var _QueueView_ :Control
+var _ColorOptions_ :OptionButton
 
 var root :TreeItem
 
@@ -31,6 +36,7 @@ func _ready():
 
     _Collapse_.pressed.connect(_collapse_all.bind(true))
     _Expand_.pressed.connect(_collapse_all.bind(false))
+    _Descending_.toggled.connect(_on_descending_toggled)
 
 
     root = Tree_.create_item()
@@ -58,6 +64,9 @@ func __setup_dependencies() -> void:
 
     var _loc_ := CSLocator.with(self)
     _loc_.connect_service_found("DirPathLabel", func(service): _DirPathLabel_ = service)
+    _loc_.connect_service_found("Queue", func(service): _Queue_ = service)
+    _loc_.connect_service_found("QueueView", func(service): _QueueView_ = service)
+    _loc_.connect_service_found("ColorOptions", func(service): _ColorOptions_ = service)
 
 
 func _shortcut_input(event: InputEvent):
@@ -119,7 +128,10 @@ func update_tree_view(coll_ :Dictionary, list_ :Array, group_ :Dictionary, dir_ 
     for i in 3: _color_group_.set_selectable(i, false)
 
     # show only icons with chosen color
-    for _Index in group_.icons:
+
+    var _indices_ :Array = __get_sorted_indices(group_.icons, list_)
+    if _Descending_.button_pressed: _indices_.reverse()
+    for _Index in _indices_:
         var _icon_name_ = list_[_Index]
 
         var _icon_item_ :TreeItem = Tree_.create_item(root)
@@ -157,6 +169,14 @@ func update_tree_view(coll_ :Dictionary, list_ :Array, group_ :Dictionary, dir_ 
                     else: __set_color(_node_item_, _node_data_[_AttributeOrSet], _Offset)
 
                 _node_item_.add_button(GE.TreeColumn.BUTTONS, update_color_icon__, GE.TreeButtonId.QUEUE, true)
+
+
+func __get_sorted_indices(indices_, names_) -> Array:
+    var _sorted_ :Dictionary = {}
+    for _Index in indices_:
+        _sorted_[names_[_Index]] = _Index
+    _sorted_.sort()
+    return _sorted_.values()
 
 
 func __set_color(item_ :TreeItem, data_ :Dictionary, offset_ :int):
@@ -226,9 +246,70 @@ func __on_update_opacity(item_ :TreeItem, value_ :float):
 
     var _icon_ :TreeItem = item_.get_parent()
     preview_image.emit(
-        '%s/%s' %[_DirPathLabel_.text, _icon_.get_text(0)],
+        '%s/%s' %[_DirPathLabel_.text, _icon_.get_text(GC.ICON_NAME_COL)],
         ParserData.get_preview_data(_icon_)
     )
+
+
+func _on_descending_toggled(_toggled_ :bool):
+    if _ColorOptions_.item_count == 0: return
+
+    var _retained_data_ :Dictionary = {}
+    for _Icon in root.get_children().slice(1):
+        var _icon_name_ :String = _Icon.get_text(GC.ICON_NAME_COL)
+        _retained_data_[_icon_name_] = {}
+
+        for _ColorItem :TreeItem in _Icon.get_children():
+            var _color_data_ :Dictionary = _ColorItem.get_meta(GC.META_DATA)
+            var _has_color_ :String = 'color' if _color_data_.has('color') else 'opacity'
+            var _unique_id_ :String = '%s_%s_%s' %[
+                _has_color_, _color_data_.node, _color_data_[_has_color_].attribute
+            ]
+            _retained_data_[_icon_name_][_unique_id_] = _color_data_.duplicate(true)
+
+    update_tree_view(
+        ParserData.icon_coll, ParserData.icon_list,
+        _ColorOptions_.get_selected_metadata(), _DirPathLabel_.text,
+    )
+
+    for _Icon in root.get_children().slice(1):
+        var _icon_name_ :String = _Icon.get_text(GC.ICON_NAME_COL)
+
+        for _ColorItem :TreeItem in _Icon.get_children():
+            var _color_data_ :Dictionary = _ColorItem.get_meta(GC.META_DATA)
+            var _has_color_ :String = 'color' if _color_data_.has('color') else 'opacity'
+            var _unique_id_ :String = '%s_%s_%s' %[
+                _has_color_, _color_data_.node, _color_data_[_has_color_].attribute
+            ]
+            if not _retained_data_[_icon_name_].has(_unique_id_): continue
+            _ColorItem.set_meta(
+                GC.META_DATA,
+                _retained_data_[_icon_name_][_unique_id_].duplicate(true)
+            )
+            AppState.current_preview_changed_list.clear()
+
+            _color_data_ = _ColorItem.get_meta(GC.META_DATA)
+            if _color_data_.queue != null: 
+                print('queue %s' %_color_data_.queue)
+                _Queue_.set_item_metadata(_color_data_.queue, _ColorItem)
+            check_same(_ColorItem)
+            update_button_state(_ColorItem, GE.TreeColumn.BUTTONS)
+            if _color_data_.is_queued:
+                var _button_idx_ :int = _ColorItem.get_button_by_id(
+                    GE.TreeColumn.BUTTONS, GE.TreeButtonId.QUEUE
+                )
+                # if _button_idx_ != -1:
+                _ColorItem.set_button(GE.TreeColumn.BUTTONS, _button_idx_, icon_reload__)
+            if _retained_data_[_icon_name_][_unique_id_].has('color'):
+                _ColorItem.set_icon_modulate(
+                    GE.TreeColumn.NEW_COLOR,
+                    _retained_data_[_icon_name_][_unique_id_].color.new
+                )
+            if _retained_data_[_icon_name_][_unique_id_].has('opacity'):
+                _ColorItem.set_range(
+                    GE.TreeColumn.NEW_OPACITY,
+                    _retained_data_[_icon_name_][_unique_id_].opacity.new
+                )
 
 
 func _on_tree_button_clicked(item_ :TreeItem, col_ :int, id_ :int, mouse_button_ :int):
@@ -259,7 +340,10 @@ func _on_tree_item_selected():
 
     match _tree_item_.get_meta('data').name:
         'file_name':
-            var _path_ :String = '%s/%s' %[_DirPathLabel_.text, _tree_item_.get_text(0)]
+            var _path_ :String = '%s/%s' %[
+                _DirPathLabel_.text,
+                _tree_item_.get_text(GC.ICON_NAME_COL)
+            ]
             var _data_ :TreeItem = ParserData.get_preview_data(_tree_item_)
             if !AppState.current_preview_changed_list.has(_tree_item_):
                 AppState.current_preview_changed_list[_tree_item_] = {}
@@ -280,7 +364,7 @@ func _on_tree_item_selected():
 
                     var _icon_ :TreeItem = _tree_item_.get_parent()
                     preview_image.emit(
-                        '%s/%s' %[_DirPathLabel_.text, _icon_.get_text(0)],
+                        '%s/%s' %[_DirPathLabel_.text, _icon_.get_text(GC.ICON_NAME_COL)],
                         ParserData.get_preview_data(_icon_)
                     )
 

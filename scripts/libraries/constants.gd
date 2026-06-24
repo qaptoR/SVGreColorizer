@@ -3,6 +3,7 @@ extends Object
 
 
 const META_DATA :StringName = &'data'
+const ICON_NAME_COL :int = 0
 
 # SVG PARSING
 const COLOR :String = 'color'

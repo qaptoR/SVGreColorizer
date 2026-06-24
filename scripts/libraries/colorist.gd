@@ -66,6 +66,19 @@ static func update_font_color (theme_ :Theme, color_ :Color):
             theme_.set_color(_Name, _Type, color_)
 
 
+static func sort_color_list(color_list_ :Array) -> Array:
+    color_list_.sort_custom(func(a: Color, b: Color):
+        var _a_g_ = a.s < 0.1; var _b_g_ = b.s < 0.1
+        if _a_g_ != _b_g_: return _b_g_ # if one is gray, the other is not, gray goes last
+        if _a_g_ and _b_g_: return a.v < b.v # if both are gray, sort by value only
+
+        if not is_equal_approx(a.h, b.h):
+            return a.h < b.h
+        return a.v < b.v
+    )
+    return color_list_
+
+
 static func update_preview_color(app_data_ :AppData) -> void:
     for _Preview in preview_frame_references:
         _Preview.color = app_data_.color_state.preview_color

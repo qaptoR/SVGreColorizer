@@ -126,7 +126,7 @@ func _on_scale_slider_value_changed(value_ :float) -> void:
     _ScaleLabel_.text = "Scale: %.1f" %value_
     var _item_ = _TreeView_.Tree_.get_selected()
     if _item_ == null: return
-    preview_image('%s/%s' %[_DirPathLabel_.text, _item_.get_text(0)], _item_)
+    preview_image('%s/%s' %[_DirPathLabel_.text, _item_.get_text(GC.ICON_NAME_COL)], _item_)
 
 
 func _on_scale_label_gui_input(event_ :InputEvent) -> void:

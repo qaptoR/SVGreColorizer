@@ -59,11 +59,11 @@ func __setup_dependencies() -> void:
     _loc_.connect_service_found("DirPathLabel", func(service): _DirPathLabel_ = service)
 
 
-func _unhandled_key_input(event_: InputEvent) -> void:
-    if event_.is_action_pressed("ui_cancel"): pass
+func _input(event_: InputEvent) -> void:
+    if not visible: return
+    if event_.is_action_pressed("ui_cancel"): hide()
     elif event_.is_action_pressed("ui_accept"):
-        _ColorPicker_.color_changed.emit(_ColorPicker_.color)
-    hide()
+        _on_color_changed(_ColorPicker_.color, true); hide()
 
 
 func open_color_picker(alternate_ :bool = false) -> void:
@@ -80,11 +80,13 @@ func open_color_picker(alternate_ :bool = false) -> void:
     popup()
 
 
-func _on_color_changed(color_ :Color) -> void:
+func _on_color_changed(color_ :Color, swatch_ui_accept_ :bool = false) -> void:
     match AppState.color_picker_state:
         GE.Color_Picker.TREE: __update_treeitem_color(color_)
         GE.Color_Picker.OPTIONS: __update_interface_colors(color_)
-        GE.Color_Picker.SWATCH: return
+        GE.Color_Picker.SWATCH: 
+            if not swatch_ui_accept_: return
+            add_new_color.emit('#%s' %color_.to_html(false))
 
 
 func __update_treeitem_color(color_ :Color):
@@ -99,7 +101,7 @@ func __update_treeitem_color(color_ :Color):
 
     match _button_.icon.get_meta(GC.META_DATA).name:
         'file_name': preview_image.emit(
-            '%s/%s' %[_DirPathLabel_.text, _button_.icon.get_text(0)],
+            '%s/%s' %[_DirPathLabel_.text, _button_.icon.get_text(GC.ICON_NAME_COL)],
             ParserData.get_preview_data(_button_.icon)
         )
 

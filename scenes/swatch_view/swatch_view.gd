@@ -16,9 +16,12 @@ signal open_color_picker()
 @onready var _clearAll_ :Button = %ClearAll
 @onready var _ImportColors_ :Button = %ImportColors
 @onready var _ExportColors_ :Button = %ExportColors
+@onready var _SortColors_ :Button = %SortColors
 
 var _ColorPicker_ :ColorPicker
 var _FileDialog_ :FileDialog
+
+var current_colors :Array = []
 
 
 func _ready() -> void:
@@ -31,6 +34,7 @@ func _ready() -> void:
     _clearAll_.pressed.connect(_on_clear_all_pressed)
     _ImportColors_.pressed.connect(_on_import_colors_pressed)
     _ExportColors_.pressed.connect(_on_export_colors_pressed)
+    _SortColors_.pressed.connect(_on_sort_colors_pressed)
 
     _CurrentSwatch_.item_clicked.connect(_on_swatch_item_clicked.bind(_CurrentSwatch_))
     _CustomSwatch_.item_clicked.connect(_on_swatch_item_clicked.bind(_CustomSwatch_))
@@ -58,7 +62,7 @@ func __setup_dependencies() -> void:
 func update_current_colors(color_set_ :Array):
     _CurrentSwatch_.clear()
 
-    for _Color in color_set_:
+    for _Color in Colorist.sort_color_list(color_set_.duplicate()):
         var i :int = _CurrentSwatch_.get_item_count()
         _CurrentSwatch_.add_item('#'+_Color.to_html(), color_icon__)
         _CurrentSwatch_.set_item_icon_modulate(i, _Color)
@@ -131,6 +135,18 @@ func _on_add_selected_pressed() -> void:
 
     for _I in _list_:
         add_new_color(_CurrentSwatch_.get_item_text(_I))
+
+
+func _on_sort_colors_pressed() -> void:
+    var _colors_ :Array = []
+
+    for _I in _CustomSwatch_.get_item_count():
+        _colors_.append(Color(_CustomSwatch_.get_item_text(_I)))
+
+    _colors_ = Colorist.sort_color_list(_colors_)
+    _CustomSwatch_.clear()
+
+    for _Color in _colors_: add_new_color(_Color.to_html())
 
 
 func _on_new_color_pressed() -> void:

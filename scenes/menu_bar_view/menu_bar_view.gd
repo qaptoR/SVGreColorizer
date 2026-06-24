@@ -100,10 +100,12 @@ func parse_icon_directory(dir_ :String, selected_ :bool = true) -> void:
 func update_color_options(set_ :Dictionary):
     _ColorOptions_.clear()
 
-    for _Color in set_.keys():
+    for _Color in Colorist.sort_color_list(set_.keys().duplicate()):
         var _id_ = _ColorOptions_.get_item_count()
         _ColorOptions_.add_icon_item(
-            Colorist.create_colored_icon(color_icon__, _Color.to_html()), ' %s' %set_[_Color].size()
+            Colorist.create_colored_icon(color_icon__, _Color.to_html()), ' %s #%s' %[
+                set_[_Color].size(), _Color.to_html()
+            ],
         )
         _ColorOptions_.set_item_metadata(_id_, {'color': _Color, 'icons': set_[_Color]} )
 

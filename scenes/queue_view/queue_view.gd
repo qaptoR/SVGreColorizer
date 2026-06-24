@@ -8,7 +8,6 @@ signal clear_previews()
 
 const MAX_COLUMNS :int = 5
 const FIRST_ITEMCOL :int = 0
-const TEXT_COL :int = 0
 
 @export var color_icon__ :Texture
 @export var icon_reload__ :Texture
@@ -51,6 +50,7 @@ func __setup_dependencies() -> void:
     _conn_.register("sig:preview_image")
 
     var _gloc_ := CSLocator.with(get_tree().current_scene)
+    _gloc_.register("QueueView", self)
     _gloc_.register("Queue", _Queue_)
 
     var _loc_ := CSLocator.with(self)
@@ -62,7 +62,7 @@ func __setup_dependencies() -> void:
 
 func add_change(item_ :TreeItem, col_ :int) -> void:
     var dir :String = _DirPathLabel_.text
-    var iconName :String = item_.get_parent().get_text(0)
+    var iconName :String = item_.get_parent().get_text(GC.ICON_NAME_COL)
     var itemCount :int = _Queue_.get_item_count()
     var _item_data_ :Dictionary = item_.get_meta(GC.META_DATA)
 
@@ -80,7 +80,6 @@ func add_change(item_ :TreeItem, col_ :int) -> void:
         _Queue_.add_item("---", null, false)
         _Queue_.add_item("---", null, false)
 
-    #TODO: add label items for opacity values
     if _item_data_.has('opacity'):
         _Queue_.add_item(str(_item_data_.opacity.org), null, false)
         _Queue_.add_item(str(_item_data_.opacity.new), null, false)
@@ -245,18 +244,7 @@ func _on_commit_selected_pressed(confirmation_ :bool) -> void:
         _commit_list_[_icon_].append(_item_)
 
     # collect all remaining queued changes into a list
-    var _uncommited_list_ :Dictionary = {}
-    for _I in range(0, _Queue_.get_item_count(), MAX_COLUMNS):
-        if _I in _selected_: continue
-        var _item_ :TreeItem = _Queue_.get_item_metadata(_I)
-        var _icon_ :String = _item_.get_parent().get_text(0)
-        var _item_data_ :Dictionary = _item_.get_meta(GC.META_DATA).duplicate(true)
-        var _has_color_ :String = 'color' if _item_data_.has('color') else 'opacity'
-        var _unique_id_ :String = '%s_%s_%s' %[
-            _has_color_, _item_data_.node, _item_data_[_has_color_].attribute
-        ]
-
-        _uncommited_list_.get_or_add(_icon_, {})[_unique_id_] = _item_data_
+    var _uncommited_list_ :Dictionary = get_uncommited_list(_selected_)
 
     for _Icon in _commit_list_.keys():
         __commit_changes(_Icon, _commit_list_)
@@ -273,7 +261,7 @@ func _on_commit_selected_pressed(confirmation_ :bool) -> void:
         _ColorOptions_.item_selected.emit(_Idx)
 
         for _Icon :TreeItem in _TreeView_.root.get_children().slice(1):
-            var _icon_name_ :String = _Icon.get_text(0)
+            var _icon_name_ :String = _Icon.get_text(GC.ICON_NAME_COL)
             if not _uncommited_list_.has(_icon_name_): continue
 
             for _ColorItem :TreeItem in _Icon.get_children():
@@ -283,17 +271,41 @@ func _on_commit_selected_pressed(confirmation_ :bool) -> void:
                     _has_color_, _color_data_.node, _color_data_[_has_color_].attribute,
                 ]
 
-                if _uncommited_list_[_icon_name_].has(_unique_id_):
-                    _ColorItem.set_meta(
-                        GC.META_DATA,
-                        _uncommited_list_[_icon_name_][_unique_id_].duplicate(true)
-                    )
-                    add_change(_ColorItem, GE.TreeColumn.BUTTONS)
-                    TreeView.check_same(_ColorItem)
+                if not _uncommited_list_[_icon_name_].has(_unique_id_): continue
+                _ColorItem.set_meta(
+                    GC.META_DATA,
+                    _uncommited_list_[_icon_name_][_unique_id_].duplicate(true)
+                )
+                add_change(_ColorItem, GE.TreeColumn.BUTTONS)
+                TreeView.check_same(_ColorItem)
+                if _uncommited_list_[_icon_name_][_unique_id_].has('color'):
                     _ColorItem.set_icon_modulate(
                         GE.TreeColumn.NEW_COLOR,
                         _uncommited_list_[_icon_name_][_unique_id_].color.new
                     )
+                if _uncommited_list_[_icon_name_][_unique_id_].has('opacity'):
+                    _ColorItem.set_range(
+                        GE.TreeColumn.NEW_OPACITY,
+                        _uncommited_list_[_icon_name_][_unique_id_].opacity.new
+                    )
+
+
+func get_uncommited_list(items_ :PackedInt32Array) -> Dictionary:
+    var _uncommited_list_ :Dictionary = {}
+    for _I in range(0, _Queue_.get_item_count(), MAX_COLUMNS):
+        if _I in items_: continue
+        var _item_ :TreeItem = _Queue_.get_item_metadata(_I)
+        var _icon_ :String = _item_.get_parent().get_text(GC.ICON_NAME_COL)
+        var _item_data_ :Dictionary = _item_.get_meta(GC.META_DATA).duplicate(true)
+        var _has_color_ :String = 'color' if _item_data_.has('color') else 'opacity'
+        var _unique_id_ :String = '%s_%s_%s' %[
+            _has_color_, _item_data_.node, _item_data_[_has_color_].attribute
+        ]
+
+        _uncommited_list_.get_or_add(_icon_, {})[_unique_id_] = _item_data_
+
+    return _uncommited_list_
+
 
 func _on_queue_item_clicked(index_ :int, _position_ :Vector2, mouse_button_ :int) -> void:
     if mouse_button_ != MOUSE_BUTTON_RIGHT: return
@@ -303,7 +315,7 @@ func _on_queue_item_clicked(index_ :int, _position_ :Vector2, mouse_button_ :int
     var _parent_ :TreeItem = _item_.get_parent()
 
     preview_image.emit(
-        '%s/%s' %[_DirPathLabel_.text, _parent_.get_text(0)],
+        '%s/%s' %[_DirPathLabel_.text, _parent_.get_text(GC.ICON_NAME_COL)],
         ParserData.get_preview_data(_parent_)
     )
 
@@ -312,7 +324,7 @@ func _on_queue_item_clicked(index_ :int, _position_ :Vector2, mouse_button_ :int
 
 
 func __commit_changes(icon_ :TreeItem, commit_list_ :Dictionary[TreeItem, Array] = {}) -> void:
-    var _filename_ :String = _DirPathLabel_.text.path_join(icon_.get_text(TEXT_COL))
+    var _filename_ :String = _DirPathLabel_.text.path_join(icon_.get_text(GC.ICON_NAME_COL))
     var _data_ :TreeItem = ParserData.get_preview_data(icon_, true)
 
     var _file_ = FileAccess.open(_filename_, FileAccess.READ)
