@@ -42,6 +42,7 @@ func __setup_dependencies() -> void:
     _gcon_.connect_signal("sig:export_palette", "export_palette", export_palette)
     _gcon_.connect_signal("sig:preset_added", "preset_added", _on_color_picker_preset_added)
     _gcon_.connect_signal("sig:preset_removed", "preset_removed", _on_color_picker_preset_removed)
+    _gcon_.connect_signal("sig:add_new_color", "add_new_color", add_new_color)
 
     var _conn_ := CSConnector.with(self)
     _conn_.register("sig:open_color_picker")

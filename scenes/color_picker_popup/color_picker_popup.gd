@@ -3,6 +3,7 @@ extends Window
 
 
 signal preview_image(path :String, data :Array[TreeItem])
+signal add_new_color(color :String)
 
 @export var color_icon__ :Texture
 
@@ -25,6 +26,8 @@ func _ready() -> void:
     _ColorPicker_.color_changed.connect(_on_color_changed)
     _CancelButton_.pressed.connect(hide)
     _AcceptButton_.pressed.connect(func():
+        if AppState.color_picker_state == GE.Color_Picker.SWATCH:
+            add_new_color.emit("#"+_ColorPicker_.color.to_html(false))
         _ColorPicker_.color_changed.emit(_ColorPicker_.color)
         hide()
     )
@@ -42,6 +45,7 @@ func __setup_dependencies() -> void:
 
     var _conn_ := CSConnector.with(self)
     _conn_.register("sig:preview_image")
+    _conn_.register("sig:add_new_color")
 
     var _pcon_ := CSConnector.with(_ColorPicker_)
     _pcon_.register("sig:preset_added")
