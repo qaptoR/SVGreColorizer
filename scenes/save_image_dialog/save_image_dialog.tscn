@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://besj5jhe1v3aw"]
+
+[ext_resource type="Script" uid="uid://csiidht3tf8rg" path="res://scenes/save_image_dialog/save_image_dialog.gd" id="1_fptm0"]
+
+[node name="SaveImageDialog" type="Window" unique_id=103571238]
+oversampling_override = 1.0
+title = "Save Image"
+position = Vector2i(0, 36)
+size = Vector2i(800, 200)
+wrap_controls = true
+transient = true
+popup_window = true
+popup_wm_hint = true
+script = ExtResource("1_fptm0")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1510674061]
+custom_minimum_size = Vector2(600, 200)
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Suffix" type="HBoxContainer" parent="VBoxContainer" unique_id=1920312630]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="VBoxContainer/Suffix" unique_id=1491548013]
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+text = "Suffix"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Suffix" unique_id=2073580222]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "_copy"
+
+[node name="Directory" type="HBoxContainer" parent="VBoxContainer" unique_id=1040350561]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Button" type="Button" parent="VBoxContainer/Directory" unique_id=1924443487]
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+text = "Directory"
+
+[node name="Label" type="Label" parent="VBoxContainer/Directory" unique_id=1096882262]
+layout_mode = 2
+size_flags_horizontal = 3
+text = " Use Directory button to set"
+clip_text = true
+text_overrun_behavior = 4
+
+[node name="ImageOptions" type="HBoxContainer" parent="VBoxContainer" unique_id=377845400]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="VBoxContainer/ImageOptions" unique_id=1811186158]
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+text = "Save As:"
+
+[node name="Svg" type="CheckBox" parent="VBoxContainer/ImageOptions" unique_id=1291653850]
+layout_mode = 2
+text = "SVG"
+
+[node name="Png" type="CheckBox" parent="VBoxContainer/ImageOptions" unique_id=2111279769]
+layout_mode = 2
+text = "PNG"
+
+[node name="ScaleOption" type="HBoxContainer" parent="VBoxContainer" unique_id=1309175100]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Label" type="Label" parent="VBoxContainer/ScaleOption" unique_id=1463422621]
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+text = "Scale:  1"
+
+[node name="HSlider" type="HSlider" parent="VBoxContainer/ScaleOption" unique_id=1038229010]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 16.0
+value = 1.0
+
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer" unique_id=315554493]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Cancel" type="Button" parent="VBoxContainer/Buttons" unique_id=1667654223]
+layout_mode = 2
+text = " Cancel "
+
+[node name="Save" type="Button" parent="VBoxContainer/Buttons" unique_id=1030894414]
+layout_mode = 2
+text = " Save "

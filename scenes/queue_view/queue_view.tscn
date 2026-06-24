@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://mpyci2oa11d0"]
+
+[ext_resource type="Script" uid="uid://b7of72nxs4jax" path="res://scenes/queue_view/queue_view.gd" id="1_l4ygp"]
+[ext_resource type="Texture2D" uid="uid://bjkfpalfrw1ne" path="res://assets/icons/icon_reload.svg" id="2_m57p3"]
+[ext_resource type="Texture2D" uid="uid://d0s2s0v248ot0" path="res://assets/icons/color_icon.png" id="2_vctei"]
+[ext_resource type="Texture2D" uid="uid://daik2gmehetae" path="res://assets/icons/icon_add.svg" id="4_d1rs0"]
+
+[node name="QueueView" type="VBoxContainer" unique_id=1259188829]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_l4ygp")
+color_icon__ = ExtResource("2_vctei")
+icon_reload__ = ExtResource("2_m57p3")
+update_color_icon__ = ExtResource("4_d1rs0")
+
+[node name="Queue" type="ItemList" parent="." unique_id=1564626777]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+wraparound_items = false
+scroll_hint_mode = 1
+
+[node name="Buttons" type="HBoxContainer" parent="." unique_id=1923672593]
+layout_mode = 2
+
+[node name="ClearAll" type="Button" parent="Buttons" unique_id=414347567]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Clear All"
+
+[node name="ClearSelected" type="Button" parent="Buttons" unique_id=60334817]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Clear Selected"
+
+[node name="CommitAll" type="Button" parent="Buttons" unique_id=1648691158]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Commit All"
+
+[node name="CommitSelected" type="Button" parent="Buttons" unique_id=205786134]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Commit Selected"

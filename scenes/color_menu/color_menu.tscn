@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://bfv4iib2hf0mg"]
+
+[ext_resource type="Theme" uid="uid://cjviyluxi42ed" path="res://assets/themes/main_theme.tres" id="1_m3782"]
+[ext_resource type="Script" uid="uid://7s0eamjuvrrb" path="res://scenes/color_menu/color_menu.gd" id="2_5msok"]
+[ext_resource type="Texture2D" uid="uid://d0s2s0v248ot0" path="res://assets/icons/color_icon.png" id="2_bidsm"]
+
+[node name="ColorMenu" type="Window" unique_id=1275559221]
+oversampling_override = 1.0
+title = "Color Menu"
+position = Vector2i(0, 36)
+size = Vector2i(280, 215)
+transient = true
+unresizable = true
+popup_window = true
+popup_wm_hint = true
+minimize_disabled = true
+maximize_disabled = true
+theme = ExtResource("1_m3782")
+script = ExtResource("2_5msok")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1402797603]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = 15.0
+offset_right = -25.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=2111276671]
+layout_mode = 2
+theme_override_constants/separation = 17
+
+[node name="Options" type="VBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=761723939]
+layout_mode = 2
+
+[node name="PreviewBGColor" type="HBoxContainer" parent="CenterContainer/VBoxContainer/Options" unique_id=354781113]
+layout_mode = 2
+
+[node name="PreviewButton" type="Button" parent="CenterContainer/VBoxContainer/Options/PreviewBGColor" unique_id=1020583573]
+unique_name_in_owner = true
+layout_mode = 2
+icon = ExtResource("2_bidsm")
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/Options/PreviewBGColor" unique_id=1417962243]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Preview BG Color"
+
+[node name="ThemeColor" type="HBoxContainer" parent="CenterContainer/VBoxContainer/Options" unique_id=1210288858]
+layout_mode = 2
+
+[node name="ThemeButton" type="Button" parent="CenterContainer/VBoxContainer/Options/ThemeColor" unique_id=1190017079]
+unique_name_in_owner = true
+layout_mode = 2
+icon = ExtResource("2_bidsm")
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/Options/ThemeColor" unique_id=312606834]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Theme Color"
+
+[node name="AccentColor" type="HBoxContainer" parent="CenterContainer/VBoxContainer/Options" unique_id=177288665]
+layout_mode = 2
+
+[node name="AccentButton" type="Button" parent="CenterContainer/VBoxContainer/Options/AccentColor" unique_id=2062255712]
+unique_name_in_owner = true
+layout_mode = 2
+icon = ExtResource("2_bidsm")
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/Options/AccentColor" unique_id=1218560132]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Accent Color"
+
+[node name="FontColor" type="HBoxContainer" parent="CenterContainer/VBoxContainer/Options" unique_id=1894570801]
+layout_mode = 2
+
+[node name="FontButton" type="Button" parent="CenterContainer/VBoxContainer/Options/FontColor" unique_id=1678138484]
+unique_name_in_owner = true
+layout_mode = 2
+icon = ExtResource("2_bidsm")
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/Options/FontColor" unique_id=1842554433]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Font Color"
+
+[node name="Settings" type="VBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=1237901092]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="CenterContainer/VBoxContainer/Settings" unique_id=586808115]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = " Save Settings "
+
+[node name="ResetButton" type="Button" parent="CenterContainer/VBoxContainer/Settings" unique_id=1808577874]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = " Reset Defaults "

@@ -1,0 +1,38 @@
+
+
+
+
+
+  I. SVGreColorizer
+
+     .M"""bgd `7MMF'   `7MF' .g8"""bgd
+    ,MI    "Y   `MA     ,V .dP'     `M
+    `MMb.        VM:   ,V  dM'       `
+      `YMMNq.     MM.  M'  MM
+    .     `MM     `MM A'   MM.    `7MMF'
+    Mb     dM      :MM;    `Mb.     MM
+    P"Ybmmd"        VF       `"bmmmdPY
+                                          ,,                    ,,
+                       .g8"""bgd        `7MM                    db
+                     .dP'     `M          MM
+    `7Mb,od8 .gP"Ya  dM'       ` ,pW"Wq.  MM  ,pW"Wq.`7Mb,od8 `7MM  M"""MMV .gP"Ya `7Mb,od8
+      MM' "',M'   Yb MM         6W'   `Wb MM 6W'   `Wb MM' "'   MM  '  AMV ,M'   Yb  MM' "'
+      MM    8M"""""" MM.        8M     M8 MM 8M     M8 MM       MM    AMV  8M""""""  MM
+      MM    YM.    , `Mb.     ,'YA.   ,A9 MM YA.   ,A9 MM       MM   AMV  ,YM.    ,  MM
+    .JMML.   `Mbmmd'   `"bmmmd'  `Ybmd9'.JMML.`Ybmd9'.JMML.   .JMML.AMMmmmM `Mbmmd'.JMML.
+
+
+
+  II. About
+
+SVGreColorizer is a GUI application made to facilitate batch recoloring of SVG files,
+with quality of life features that make it easy to preview your changes before commiting
+them.
+
+Before using this application, please remember to create a backup of your SVG files.
+
+The tool is designed to work on directories containing SVG files, so the workflow 
+typically involves collecting copies of all the SVG files you wish to share a particular
+color scheme into a single directory, and then using the application to recolor them all at once.
+
+![Color Bucket Logo](assets/icons/icon.svg)

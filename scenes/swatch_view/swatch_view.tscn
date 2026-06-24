@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://co0sctwvr5uvv"]
+
+[ext_resource type="Script" uid="uid://bcvrehqod68lw" path="res://scenes/swatch_view/swatch_view.gd" id="1_qqnlp"]
+[ext_resource type="Texture2D" uid="uid://d0s2s0v248ot0" path="res://assets/icons/color_icon.png" id="2_4r31t"]
+
+[node name="SwatchView" type="HBoxContainer" unique_id=383613674]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_qqnlp")
+color_icon__ = ExtResource("2_4r31t")
+
+[node name="CurrentColors" type="VBoxContainer" parent="." unique_id=488789711]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CurrentSwatch" type="ItemList" parent="CurrentColors" unique_id=718192240]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+select_mode = 1
+
+[node name="Buttons" type="HBoxContainer" parent="CurrentColors" unique_id=560444339]
+layout_mode = 2
+
+[node name="AddAll" type="Button" parent="CurrentColors/Buttons" unique_id=395251009]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add All"
+
+[node name="AddSelected" type="Button" parent="CurrentColors/Buttons" unique_id=1896298640]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Add Selected"
+
+[node name="CustomColors" type="VBoxContainer" parent="." unique_id=673562654]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CustomSwatch" type="ItemList" parent="CustomColors" unique_id=303162116]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+select_mode = 1
+
+[node name="ListButtons" type="HBoxContainer" parent="CustomColors" unique_id=955669889]
+layout_mode = 2
+
+[node name="NewColor" type="Button" parent="CustomColors/ListButtons" unique_id=1472343058]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "New"
+
+[node name="RemoveSelected" type="Button" parent="CustomColors/ListButtons" unique_id=24837058]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Remove"
+
+[node name="ClearAll" type="Button" parent="CustomColors/ListButtons" unique_id=319297527]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Clear"
+
+[node name="FileButtons" type="HBoxContainer" parent="CustomColors" unique_id=1767269787]
+layout_mode = 2
+
+[node name="ImportColors" type="Button" parent="CustomColors/FileButtons" unique_id=1339326847]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Import"
+
+[node name="ExportColors" type="Button" parent="CustomColors/FileButtons" unique_id=737396923]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Export"

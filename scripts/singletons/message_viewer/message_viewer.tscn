@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://dwgpjm0s7xunn"]
+
+[ext_resource type="Script" uid="uid://c2qjojeq1ix54" path="res://scripts/singletons/message_viewer/message_viewer.gd" id="1_06xtl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ouly"]
+
+[node name="MessageViewer" type="Node" unique_id=2032113464]
+script = ExtResource("1_06xtl")
+
+[node name="ImmediateWindow" type="AcceptDialog" parent="." unique_id=87289693]
+oversampling_override = 1.0
+title = "Attention"
+position = Vector2i(0, 36)
+size = Vector2i(269, 106)
+unresizable = true
+always_on_top = true
+
+[node name="Container" type="PanelContainer" parent="ImmediateWindow" unique_id=1882476891]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxEmpty_2ouly")
+
+[node name="ImmediateLabel" type="Label" parent="ImmediateWindow/Container" unique_id=1747431229]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BatchWindow" type="AcceptDialog" parent="." unique_id=1504797475]
+oversampling_override = 1.0
+title = "Summary"
+position = Vector2i(0, 36)
+size = Vector2i(266, 120)
+visible = true
+always_on_top = true
+
+[node name="Container" type="PanelContainer" parent="BatchWindow" unique_id=487394742]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="BatchLabel" type="RichTextLabel" parent="BatchWindow/Container" unique_id=1439339376]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+focus_mode = 2
+bbcode_enabled = true
+fit_content = true
+autowrap_mode = 0
+selection_enabled = true
+drag_and_drop_selection_enabled = false

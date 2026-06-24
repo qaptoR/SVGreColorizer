@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://bi3lwpo7dw4vw"]
+
+[ext_resource type="Script" uid="uid://t4y62c3lk12a" path="res://scenes/color_picker_popup/color_picker_popup.gd" id="1_8d2jg"]
+[ext_resource type="Theme" uid="uid://cjviyluxi42ed" path="res://assets/themes/main_theme.tres" id="1_kfnf3"]
+[ext_resource type="Texture2D" uid="uid://d0s2s0v248ot0" path="res://assets/icons/color_icon.png" id="2_nqwyk"]
+
+[node name="ColorPickerPopup" type="Window" unique_id=1780187294]
+oversampling_override = 1.0
+title = "Color Picker"
+initial_position = 1
+size = Vector2i(298, 669)
+wrap_controls = true
+transient = true
+exclusive = true
+popup_window = true
+keep_title_visible = true
+theme = ExtResource("1_kfnf3")
+script = ExtResource("1_8d2jg")
+color_icon__ = ExtResource("2_nqwyk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2012896175]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PickerShapes" type="OptionButton" parent="VBoxContainer" unique_id=133116073]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 6
+popup/item_0/text = "HSV Rectangle"
+popup/item_0/id = 0
+popup/item_1/text = "HSV Wheel"
+popup/item_1/id = 1
+popup/item_2/text = "VHS Circle"
+popup/item_2/id = 2
+popup/item_3/text = "OKHSL Circle"
+popup/item_3/id = 3
+popup/item_4/text = "OK HS Rectangle"
+popup/item_4/id = 5
+popup/item_5/text = "OK HL Rectangle"
+popup/item_5/id = 6
+
+[node name="ColorPicker" type="ColorPicker" parent="VBoxContainer" unique_id=1678496475]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="VBoxContainer" unique_id=1393585131]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Cancel" type="Button" parent="VBoxContainer/Buttons" unique_id=770630253]
+layout_mode = 2
+text = "  Cancel  "
+
+[node name="Accept" type="Button" parent="VBoxContainer/Buttons" unique_id=1929620199]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Accept"

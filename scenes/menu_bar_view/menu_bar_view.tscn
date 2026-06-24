@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://bvsxlaybit1tj"]
+
+[ext_resource type="Script" uid="uid://ba34s56jj1gxh" path="res://scenes/menu_bar_view/menu_bar_view.gd" id="1_2bycd"]
+
+[node name="MenuBarView" type="HBoxContainer" unique_id=297528962]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 20.0
+grow_horizontal = 2
+script = ExtResource("1_2bycd")
+
+[node name="ColorOptions" type="OptionButton" parent="." unique_id=1346679893]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(222, 40)
+layout_mode = 2
+allow_reselect = true
+
+[node name="DirButton" type="Button" parent="." unique_id=1404960534]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+text = "Directory"
+
+[node name="Panel" type="Panel" parent="." unique_id=686556850]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DirPathLabel" type="Label" parent="Panel" unique_id=650842027]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Use Directory Button to set"
+vertical_alignment = 1
+
+[node name="MenuButton" type="MenuButton" parent="." unique_id=1619767971]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+text = "Menu"
+flat = false

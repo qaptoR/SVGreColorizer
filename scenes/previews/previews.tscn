@@ -1,0 +1,158 @@
+[gd_scene format=3 uid="uid://bsjnkhkmara47"]
+
+[ext_resource type="Script" uid="uid://b3bm6farbbo7u" path="res://scenes/previews/previews.gd" id="1_stpck"]
+
+[node name="Previews" type="PanelContainer" unique_id=1716751889]
+offset_right = 340.0
+offset_bottom = 950.0
+script = ExtResource("1_stpck")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=742382482]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="GradientViews" type="HBoxContainer" parent="MarginContainer" unique_id=2006094460]
+visible = false
+layout_mode = 2
+
+[node name="IconViews" type="VBoxContainer" parent="MarginContainer" unique_id=367433319]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="OldState" type="ColorRect" parent="MarginContainer/IconViews" unique_id=1605094551]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(340, 460)
+layout_mode = 2
+color = Color(0.30026597, 0.1361042, 4.813075e-08, 1)
+
+[node name="Large" type="TextureRect" parent="MarginContainer/IconViews/OldState" unique_id=1117770216]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.63
+anchor_right = 0.5
+anchor_bottom = 0.63
+offset_left = -150.0
+offset_top = -150.0
+offset_right = 150.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Medium" type="TextureRect" parent="MarginContainer/IconViews/OldState" unique_id=228658260]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.206
+anchor_top = 0.152
+anchor_right = 0.206
+anchor_bottom = 0.152
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+
+[node name="Small" type="TextureRect" parent="MarginContainer/IconViews/OldState" unique_id=656834831]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.471
+anchor_top = 0.217
+anchor_right = 0.471
+anchor_bottom = 0.217
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/IconViews/OldState" unique_id=854919506]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.612
+anchor_top = 0.243
+anchor_right = 0.612
+anchor_bottom = 0.243
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/IconViews" unique_id=1249838372]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ScaleLabel" type="Label" parent="MarginContainer/IconViews/HBoxContainer" unique_id=1019913257]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 23)
+layout_mode = 2
+mouse_filter = 0
+text = "Scale: 0.0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScaleSlider" type="HSlider" parent="MarginContainer/IconViews/HBoxContainer" unique_id=375423673]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -8.0
+max_value = 8.0
+step = 0.1
+
+[node name="NewState" type="ColorRect" parent="MarginContainer/IconViews" unique_id=1183928720]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(340, 460)
+layout_mode = 2
+color = Color(0.30026597, 0.1361042, 4.813075e-08, 1)
+
+[node name="Large" type="TextureRect" parent="MarginContainer/IconViews/NewState" unique_id=1773453533]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.63
+anchor_right = 0.5
+anchor_bottom = 0.63
+offset_left = -150.0
+offset_top = -150.0
+offset_right = 150.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Medium" type="TextureRect" parent="MarginContainer/IconViews/NewState" unique_id=1012638337]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.206
+anchor_top = 0.152
+anchor_right = 0.206
+anchor_bottom = 0.152
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = 50.0
+
+[node name="Small" type="TextureRect" parent="MarginContainer/IconViews/NewState" unique_id=267724163]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.471
+anchor_top = 0.217
+anchor_right = 0.471
+anchor_bottom = 0.217
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/IconViews/NewState" unique_id=2067646615]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.612
+anchor_top = 0.243
+anchor_right = 0.612
+anchor_bottom = 0.243
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0

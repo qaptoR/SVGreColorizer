@@ -1,0 +1,102 @@
+[gd_scene format=3 uid="uid://h1t137p4ji8w"]
+
+[ext_resource type="Theme" uid="uid://cjviyluxi42ed" path="res://assets/themes/main_theme.tres" id="1_6q06x"]
+[ext_resource type="PackedScene" uid="uid://gu3otwsusq0y" path="res://scenes/tree_view/tree_view.tscn" id="1_hyk8p"]
+[ext_resource type="Script" uid="uid://cd1c4koycd0vi" path="res://scenes/main/main.gd" id="2_hujxm"]
+[ext_resource type="PackedScene" uid="uid://bi3lwpo7dw4vw" path="res://scenes/color_picker_popup/color_picker_popup.tscn" id="2_iuonh"]
+[ext_resource type="PackedScene" uid="uid://mpyci2oa11d0" path="res://scenes/queue_view/queue_view.tscn" id="2_k2fmo"]
+[ext_resource type="PackedScene" uid="uid://co0sctwvr5uvv" path="res://scenes/swatch_view/swatch_view.tscn" id="3_l3cfh"]
+[ext_resource type="PackedScene" uid="uid://bvsxlaybit1tj" path="res://scenes/menu_bar_view/menu_bar_view.tscn" id="3_yyfjg"]
+[ext_resource type="Texture2D" uid="uid://d0s2s0v248ot0" path="res://assets/icons/color_icon.png" id="4_blune"]
+[ext_resource type="PackedScene" uid="uid://bsjnkhkmara47" path="res://scenes/previews/previews.tscn" id="5_ow5a4"]
+[ext_resource type="PackedScene" uid="uid://bfv4iib2hf0mg" path="res://scenes/color_menu/color_menu.tscn" id="9_b1x3f"]
+[ext_resource type="PackedScene" uid="uid://besj5jhe1v3aw" path="res://scenes/save_image_dialog/save_image_dialog.tscn" id="10_a8run"]
+[ext_resource type="Script" uid="uid://n064jvf4lwhp" path="res://scenes/main/file_dialog.gd" id="11_ouso4"]
+
+[node name="Main" type="Control" unique_id=769434814]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_6q06x")
+script = ExtResource("2_hujxm")
+metadata/_edit_lock_ = true
+metadata/_edit_group_ = true
+
+[node name="Control" type="Control" parent="." unique_id=556442247]
+custom_minimum_size = Vector2(1920, 1080)
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Static" type="HBoxContainer" parent="Control" unique_id=774233]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Interface" type="VBoxContainer" parent="Control/Static" unique_id=1419567086]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MenuBarView" parent="Control/Static/Interface" unique_id=297528962 instance=ExtResource("3_yyfjg")]
+layout_mode = 2
+color_icon__ = ExtResource("4_blune")
+
+[node name="Views" type="HBoxContainer" parent="Control/Static/Interface" unique_id=163143814]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TreeView" parent="Control/Static/Interface/Views" unique_id=2069561359 instance=ExtResource("1_hyk8p")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.75
+
+[node name="QueueView" parent="Control/Static/Interface/Views" unique_id=1259188829 node_paths=PackedStringArray("_ConfirmCommitDialog__") instance=ExtResource("2_k2fmo")]
+layout_mode = 2
+_ConfirmCommitDialog__ = NodePath("../../../../Popups/ConfirmCommitDialog")
+
+[node name="SwatchView" parent="Control/Static/Interface/Views" unique_id=1648839038 instance=ExtResource("3_l3cfh")]
+layout_mode = 2
+size_flags_stretch_ratio = 0.6
+
+[node name="Previews" parent="Control/Static" unique_id=367433319 instance=ExtResource("5_ow5a4")]
+layout_mode = 2
+
+[node name="Popups" type="Control" parent="Control" unique_id=1338659816]
+anchors_preset = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="ColorPickerPopup" parent="Control/Popups" unique_id=905093620 instance=ExtResource("2_iuonh")]
+visible = false
+
+[node name="ColorMenu" parent="Control/Popups" unique_id=1275559221 instance=ExtResource("9_b1x3f")]
+visible = false
+
+[node name="SaveImageDialog" parent="Control/Popups" unique_id=103571238 instance=ExtResource("10_a8run")]
+visible = false
+
+[node name="FileDialog" type="FileDialog" parent="Control/Popups" unique_id=2048962686]
+oversampling_override = 1.0
+title = "Select Icon Directory"
+position = Vector2i(0, 36)
+size = Vector2i(1076, 620)
+script = ExtResource("11_ouso4")
+
+[node name="ConfirmCommitDialog" type="ConfirmationDialog" parent="Control/Popups" unique_id=785085520]
+oversampling_override = 1.0
+position = Vector2i(0, 36)
+size = Vector2i(366, 102)
+dialog_text = "You are about to commit all queued changes,
+would you like to continue?"
