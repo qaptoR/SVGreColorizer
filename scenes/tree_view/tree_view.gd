@@ -200,6 +200,7 @@ func __set_color(item_ :TreeItem, data_ :Dictionary, offset_ :int):
     }
     _data_['node'] = data_.node_id
     _data_['offset'] = offset_
+    item_.set_selectable(GE.TreeColumn.ORG_COLOR, true)
 
 
 func __set_opacity(item_ :TreeItem, data_ :Dictionary, offset_ :int):
@@ -255,7 +256,12 @@ func _on_descending_toggled(_toggled_ :bool):
     if _ColorOptions_.item_count == 0: return
 
     var _retained_data_ :Dictionary = {}
-    for _Icon in root.get_children().slice(1):
+    for _Icon in root.get_children():
+        var _icon_data_ :Dictionary = _Icon.get_meta(GC.META_DATA)
+        if _icon_data_.name == 'group_color':
+            _retained_data_['group_color'] = _icon_data_.duplicate(true)
+            continue
+
         var _icon_name_ :String = _Icon.get_text(GC.ICON_NAME_COL)
         _retained_data_[_icon_name_] = {}
 
@@ -272,9 +278,19 @@ func _on_descending_toggled(_toggled_ :bool):
         _ColorOptions_.get_selected_metadata(), _DirPathLabel_.text,
     )
 
-    for _Icon in root.get_children().slice(1):
-        var _icon_name_ :String = _Icon.get_text(GC.ICON_NAME_COL)
+    for _Icon in root.get_children():
+        var _icon_data_ :Dictionary = _Icon.get_meta(GC.META_DATA)
+        if _icon_data_.name == 'group_color':
+            _Icon.set_meta(GC.META_DATA, _retained_data_['group_color'].duplicate(true))
+            check_same(_Icon)
+            update_button_state(_Icon, GE.TreeColumn.NEW_COLOR)
+            _Icon.set_icon_modulate(GE.TreeColumn.NEW_COLOR, _retained_data_['group_color'].color.new)
+            if _retained_data_['group_color'].is_queued:
+                var _button_idx_ :int = _Icon.get_button_by_id( GE.TreeColumn.NEW_COLOR, GE.TreeButtonId.QUEUE)
+                _Icon.set_button(GE.TreeColumn.NEW_COLOR, _button_idx_, icon_reload__)
+            continue
 
+        var _icon_name_ :String = _Icon.get_text(GC.ICON_NAME_COL)
         for _ColorItem :TreeItem in _Icon.get_children():
             var _color_data_ :Dictionary = _ColorItem.get_meta(GC.META_DATA)
             var _has_color_ :String = 'color' if _color_data_.has('color') else 'opacity'
@@ -290,21 +306,23 @@ func _on_descending_toggled(_toggled_ :bool):
 
             _color_data_ = _ColorItem.get_meta(GC.META_DATA)
             if _color_data_.queue != null: 
-                print('queue %s' %_color_data_.queue)
                 _Queue_.set_item_metadata(_color_data_.queue, _ColorItem)
+
             check_same(_ColorItem)
             update_button_state(_ColorItem, GE.TreeColumn.BUTTONS)
+
             if _color_data_.is_queued:
                 var _button_idx_ :int = _ColorItem.get_button_by_id(
                     GE.TreeColumn.BUTTONS, GE.TreeButtonId.QUEUE
                 )
-                # if _button_idx_ != -1:
                 _ColorItem.set_button(GE.TreeColumn.BUTTONS, _button_idx_, icon_reload__)
+
             if _retained_data_[_icon_name_][_unique_id_].has('color'):
                 _ColorItem.set_icon_modulate(
                     GE.TreeColumn.NEW_COLOR,
                     _retained_data_[_icon_name_][_unique_id_].color.new
                 )
+
             if _retained_data_[_icon_name_][_unique_id_].has('opacity'):
                 _ColorItem.set_range(
                     GE.TreeColumn.NEW_OPACITY,
@@ -325,12 +343,12 @@ func _on_tree_button_clicked(item_ :TreeItem, col_ :int, id_ :int, mouse_button_
             AppState.color_picker_state = GE.Color_Picker.TREE
             open_color_picker.emit(true if mouse_button_ == MouseButton.MOUSE_BUTTON_RIGHT else false)
 
-        GE.TreeButtonId.QUEUE: match item_.get_meta('data').is_queued:
-            true: match item_.get_meta('data').name:
+        GE.TreeButtonId.QUEUE: match item_.get_meta(GC.META_DATA).is_queued:
+            true: match item_.get_meta(GC.META_DATA).name:
                 'color': remove_change.emit(item_, col_, false)
                 'group_color': perform_all_queue_changes.emit(item_, GE.QueueChanges.REMOVE)
 
-            false: match item_.get_meta('data').name:
+            false: match item_.get_meta(GC.META_DATA).name:
                 'color': add_change.emit(item_, col_)
                 'group_color': perform_all_queue_changes.emit(item_, GE.QueueChanges.ADD)
 
@@ -338,7 +356,7 @@ func _on_tree_button_clicked(item_ :TreeItem, col_ :int, id_ :int, mouse_button_
 func _on_tree_item_selected():
     var _tree_item_ :TreeItem = Tree_.get_selected()
 
-    match _tree_item_.get_meta('data').name:
+    match _tree_item_.get_meta(GC.META_DATA).name:
         'file_name':
             var _path_ :String = '%s/%s' %[
                 _DirPathLabel_.text,
@@ -356,9 +374,12 @@ func _on_tree_item_selected():
             var _col_ :int = Tree_.get_selected_column()
             match _col_:
                 GE.TreeColumn.ORG_OPACITY:
-                    var _original_opacity_ := float(_tree_item_.get_meta('data').opacity.org)
-                    _tree_item_.get_meta('data').opacity.new = _original_opacity_
-                    _tree_item_.set_range(3, _original_opacity_)
+                    var _item_data_ :Dictionary = _tree_item_.get_meta(GC.META_DATA)
+                    if _item_data_.is_queued: return
+
+                    var _original_opacity_ := float(_item_data_.opacity.org)
+                    _item_data_.opacity.new = _original_opacity_
+                    _tree_item_.set_range(GE.TreeColumn.NEW_OPACITY, _original_opacity_)
                     check_same(_tree_item_)
                     update_button_state(_tree_item_, GE.TreeColumn.BUTTONS)
 
@@ -370,6 +391,22 @@ func _on_tree_item_selected():
 
                 GE.TreeColumn.NEW_OPACITY:
                     _on_new_opacity_column_selected(_tree_item_)
+
+                GE.TreeColumn.ORG_COLOR:
+                    var _item_data_ :Dictionary = _tree_item_.get_meta(GC.META_DATA)
+                    if _item_data_.is_queued: return
+
+                    var _original_color_ := Color(_item_data_.color.org)
+                    _item_data_.color.new = _original_color_
+                    _tree_item_.set_icon_modulate(GE.TreeColumn.NEW_COLOR, _original_color_)
+                    check_same(_tree_item_)
+                    update_button_state(_tree_item_, GE.TreeColumn.BUTTONS)
+
+                    var _icon_ :TreeItem = _tree_item_.get_parent()
+                    preview_image.emit(
+                        '%s/%s' %[_DirPathLabel_.text, _icon_.get_text(GC.ICON_NAME_COL)],
+                        ParserData.get_preview_data(_icon_)
+                    )
 
                 _: return
 

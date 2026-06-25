@@ -39,6 +39,7 @@ text = "Descending"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+allow_reselect = true
 scroll_hint_mode = 1
 
 [node name="Buttons" type="HBoxContainer" parent="." unique_id=1017187559]

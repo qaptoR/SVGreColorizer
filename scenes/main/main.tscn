@@ -97,6 +97,7 @@ script = ExtResource("11_ouso4")
 [node name="ConfirmCommitDialog" type="ConfirmationDialog" parent="Control/Popups" unique_id=785085520]
 oversampling_override = 1.0
 position = Vector2i(0, 36)
-size = Vector2i(366, 102)
-dialog_text = "You are about to commit all queued changes,
+size = Vector2i(429, 102)
+visible = true
+dialog_text = "You are about to commit queued changes,
 would you like to continue?"

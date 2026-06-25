@@ -123,7 +123,7 @@ func remove_change(item_ :TreeItem, col_ :int, all_ :bool) -> void:
 
     if _Queue_.get_item_count() == 0: return
     for i in range(0, _Queue_.get_item_count(), MAX_COLUMNS):
-        _Queue_.get_item_metadata(i).get_meta('data').queue = i
+        _Queue_.get_item_metadata(i).get_meta(GC.META_DATA).queue = i
 
 
 func perform_all_queue_changes(item_ :TreeItem, action_ :int) -> void:
@@ -260,7 +260,18 @@ func _on_commit_selected_pressed(confirmation_ :bool) -> void:
         _ColorOptions_.select(_Idx)
         _ColorOptions_.item_selected.emit(_Idx)
 
-        for _Icon :TreeItem in _TreeView_.root.get_children().slice(1):
+        for _Icon :TreeItem in _TreeView_.root.get_children():
+            var _icon_data_ :Dictionary = _Icon.get_meta(GC.META_DATA)
+            if _icon_data_.name == 'group_color':
+                _Icon.set_meta(GC.META_DATA, _uncommited_list_['group_color'].duplicate(true))
+                TreeView.check_same(_Icon)
+                TreeView.update_button_state(_Icon, GE.TreeColumn.NEW_COLOR)
+                _Icon.set_icon_modulate(GE.TreeColumn.NEW_COLOR, _uncommited_list_['group_color'].color.new)
+                if _uncommited_list_['group_color'].is_queued:
+                    var _button_idx_ :int = _Icon.get_button_by_id(GE.TreeColumn.NEW_COLOR, GE.TreeButtonId.QUEUE)
+                    _Icon.set_button(GE.TreeColumn.NEW_COLOR, _button_idx_, icon_reload__)
+                continue
+
             var _icon_name_ :String = _Icon.get_text(GC.ICON_NAME_COL)
             if not _uncommited_list_.has(_icon_name_): continue
 
@@ -292,6 +303,8 @@ func _on_commit_selected_pressed(confirmation_ :bool) -> void:
 
 func get_uncommited_list(items_ :PackedInt32Array) -> Dictionary:
     var _uncommited_list_ :Dictionary = {}
+    var _color_group_ = _TreeView_.root.get_child(0)
+    _uncommited_list_['group_color'] = _color_group_.get_meta(GC.META_DATA).duplicate(true)
     for _I in range(0, _Queue_.get_item_count(), MAX_COLUMNS):
         if _I in items_: continue
         var _item_ :TreeItem = _Queue_.get_item_metadata(_I)
