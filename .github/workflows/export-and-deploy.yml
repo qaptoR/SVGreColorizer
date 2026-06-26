@@ -81,7 +81,7 @@ jobs:
       - export-windows
       - export-linux
     # Only run this job on main branch
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
     strategy:
       fail-fast: true
       matrix:
