@@ -125,7 +125,8 @@ func update_tree_view(coll_ :Dictionary, list_ :Array, group_ :Dictionary, dir_ 
 
     _color_group_.add_button(GE.TreeColumn.NEW_COLOR, color_bucket_icon__, GE.TreeButtonId.COLOR, false)
     _color_group_.add_button(GE.TreeColumn.NEW_COLOR, update_color_icon__, GE.TreeButtonId.QUEUE, true)
-    for i in 3: _color_group_.set_selectable(i, false)
+    for i in range(1, 3): _color_group_.set_selectable(i, false)
+    _color_group_.set_selectable(GE.TreeColumn.ORG_COLOR, true)
 
     # show only icons with chosen color
 
@@ -370,6 +371,20 @@ func _on_tree_item_selected():
                 'data': _data_
             }
             preview_image.emit(_path_, _data_)
+        'group_color':
+            var _col_ :int = Tree_.get_selected_column()
+            match _col_:
+                GE.TreeColumn.ORG_COLOR:
+                    var _item_data_ :Dictionary = _tree_item_.get_meta(GC.META_DATA)
+                    if _item_data_.is_queued: return
+
+                    var original_color := Color(_item_data_.color.org)
+                    _item_data_.color.new = original_color
+                    _tree_item_.set_icon_modulate(GE.TreeColumn.NEW_COLOR, original_color)
+                    check_same(_tree_item_)
+                    update_button_state(_tree_item_, GE.TreeColumn.BUTTONS)
+
+                _: return
         'color':
             var _col_ :int = Tree_.get_selected_column()
             match _col_:

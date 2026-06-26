@@ -98,6 +98,5 @@ script = ExtResource("11_ouso4")
 oversampling_override = 1.0
 position = Vector2i(0, 36)
 size = Vector2i(429, 102)
-visible = true
 dialog_text = "You are about to commit queued changes,
 would you like to continue?"
