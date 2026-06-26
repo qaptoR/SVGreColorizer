@@ -24,12 +24,23 @@ static func initialize() -> void:
             'Failed to load user settings. Generating defaults',
             'app_state.gd'
         )
-        generate_user_settings()
+        generate_user_settings(GE.SettintsReset.ALL)
 
 
-static func generate_user_settings() -> void:
-    app_data = AppData.new()
-    app_data.default_directory = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES) + '/'
+static func generate_user_settings(what_ :int) -> void:
+    match what_:
+        GE.SettintsReset.THEME:
+            var _old_data_ :AppData = app_data
+            app_data = AppData.new()
+            app_data.color_picker_shape = _old_data_.color_picker_shape
+            app_data.confirm_commit = _old_data_.confirm_commit
+            app_data.favorite_directories = _old_data_.favorite_directories
+            app_data.recent_import_palette = _old_data_.recent_import_palette
+            app_data.default_directory = _old_data_.default_directory
+        GE.SettintsReset.ALL:
+            app_data = AppData.new()
+            app_data.default_directory = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES) + '/'
+
     save_settings(GC.SETTINGS_PATH, app_data)
 
 

@@ -9,6 +9,8 @@ enum QueueChanges { ADD, REMOVE }
 enum File_Dialog { PARSE, IMPORT, EXPORT, SAVE }
 enum SaveImageDialogue { PREVIEW, QUEUE }
 
+enum SettintsReset { THEME, ALL }
+
 enum MenuId {
     COLORS, IMAGE,
     DIRECTORY, CLEAR_PALETTE,

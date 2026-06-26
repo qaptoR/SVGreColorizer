@@ -7,9 +7,10 @@ static var theme_list :Dictionary = {
         'ItemList': ['+', 'panel'],
         'Tree': ['-', 'selected', 'selected_focus'],
         'Panel': [],
+        'PanelContainer': [],
         'Button': ['-', 'disabled', 'focus'],
         'MenuButton': [],
-        'Window': [],
+        # 'Window': [],
         'OptionButton': [],
     },
     'border_color': {

@@ -55,6 +55,6 @@ func _on_save_button_pressed() -> void:
 
 
 func _on_reset_button_pressed() -> void:
-    AppState.generate_user_settings()
+    AppState.generate_user_settings(GE.SettintsReset.THEME)
     Colorist.update_colors(_Main_.theme, AppState.app_data)
     hide()
