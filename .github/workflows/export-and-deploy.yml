@@ -8,7 +8,7 @@ env:
   EXPORT_NAME: SVGreColorizer
   ITCH_USERNAME: aldozeroun
   ITCH_GAME_ID: svgrecolorizer
-  PROJECT_PATH: svgrecolorizer
+  PROJECT_PATH: .
 
 jobs:
   export-windows:
@@ -28,10 +28,10 @@ jobs:
           mkdir -v -p ~/.local/share/godot/export_templates/
           mkdir -v -p ~/.config
           mv /root/.config/godot ~/.config/godot
-          mv /root/.local/share/godot_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+          mv /root/.local/share/godot/export_templates/${GODOT_VERSION}.stable ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
 
       - name: Windows Build
-        run:
+        run: |
           mkdir -v -p build/windows
           EXPORT_DIR="$(readlink -f build)"
           cd $PROJECT_PATH

@@ -35,9 +35,10 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MenuBarView" parent="Static/Interface" unique_id=297528962 instance=ExtResource("3_yyfjg")]
+[node name="MenuBarView" parent="Static/Interface" unique_id=297528962 node_paths=PackedStringArray("_AboutDialog__") instance=ExtResource("3_yyfjg")]
 layout_mode = 2
 color_icon__ = ExtResource("4_blune")
+_AboutDialog__ = NodePath("../../../Popups/AcceptDialog")
 
 [node name="Views" type="HBoxContainer" parent="Static/Interface" unique_id=163143814]
 layout_mode = 2
@@ -86,3 +87,17 @@ position = Vector2i(0, 36)
 size = Vector2i(429, 102)
 dialog_text = "You are about to commit queued changes,
 would you like to continue?"
+
+[node name="AcceptDialog" type="AcceptDialog" parent="Popups" unique_id=860693995]
+oversampling_override = 1.0
+title = "About"
+position = Vector2i(0, 36)
+size = Vector2i(439, 220)
+exclusive = false
+dialog_text = "SVGreColorizer
+(c) 2026 Aldo Zeroun
+
+Source code under MIT:
+https://github.com/qaptoR/SVGreColorizer
+
+Video Tutorial: https://youtu.be/7MGRcFI4WyA"

@@ -3,6 +3,7 @@ extends Control
 
 
 @export var color_icon__ :Texture
+@export var _AboutDialog__ :AcceptDialog
 
 @onready var _ColorOptions_ :OptionButton = %ColorOptions
 @onready var _DirButton_ :Button = %DirButton
@@ -72,6 +73,8 @@ func __setup_settings_menu() -> void:
     _SettingsMenu_.add_item('Append Logs to File', GE.MenuId.APPEND_LOGS)
 
     _SettingsMenu_.add_separator('Application')
+    _SettingsMenu_.add_item('About', GE.MenuId.ABOUT)
+    _SettingsMenu_.add_separator()
     _SettingsMenu_.add_item('Quit', GE.MenuId.QUIT_PROGRAM)
 
 
@@ -135,6 +138,7 @@ func _on_color_options_item_selected(_index_ :int) -> void:
 func _on_settings_menu_id_pressed(id_ :int) -> void:
     match id_:
         GE.MenuId.QUIT_PROGRAM: get_tree().quit()
+        GE.MenuId.ABOUT: _AboutDialog__.popup_centered()
 
         GE.MenuId.COLORS: __show_color_menu_popup()
         GE.MenuId.IMAGE: __show_save_image_dialog()
