@@ -382,7 +382,7 @@ func _on_tree_item_selected():
                     _item_data_.color.new = original_color
                     _tree_item_.set_icon_modulate(GE.TreeColumn.NEW_COLOR, original_color)
                     check_same(_tree_item_)
-                    update_button_state(_tree_item_, GE.TreeColumn.BUTTONS)
+                    update_button_state(_tree_item_, GE.TreeColumn.NEW_COLOR)
 
                 _: return
         'color':
