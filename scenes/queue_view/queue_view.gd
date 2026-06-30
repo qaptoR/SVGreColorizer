@@ -281,8 +281,8 @@ func _on_commit_selected_pressed(confirmation_ :bool) -> void:
                 var _unique_id_ :String = '%s_%s_%s' %[
                     _has_color_, _color_data_.node, _color_data_[_has_color_].attribute,
                 ]
-
                 if not _uncommited_list_[_icon_name_].has(_unique_id_): continue
+                _uncommited_list_[_icon_name_][_unique_id_].offset = _color_data_.offset
                 _ColorItem.set_meta(
                     GC.META_DATA,
                     _uncommited_list_[_icon_name_][_unique_id_].duplicate(true)
