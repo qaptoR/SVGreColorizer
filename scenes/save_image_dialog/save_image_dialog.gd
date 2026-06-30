@@ -115,8 +115,8 @@ func _on_save_button_pressed() -> void:
         _write_file_.store_string(_svgtext_)
 
     if _PngButton_.button_pressed:
-        var _newImage_ := Image.new()
-        if _newImage_.load_svg_from_string(_svgtext_, _Slider_.value):
+        var _new_image_ :Image = SvgLoader.load_from_string(_svgtext_, _Slider_.value)
+        if _new_image_ == null:
             MessageLogger.error(
                 'Failed to load image from updated svg file',
                 get_script().resource_path.get_file(), MessageLogger.BATCH
@@ -125,7 +125,7 @@ func _on_save_button_pressed() -> void:
 
         var _png_filename_ = _new_filename_ + '.png'
         _saved_files_.append(_png_filename_)
-        if _newImage_.save_png(_DirectoryLabel_.text.path_join(_png_filename_)):
+        if _new_image_.save_png(_DirectoryLabel_.text.path_join(_png_filename_)):
             MessageLogger.error(
                 "File %s did not save" %_png_filename_,
                 get_script().resource_path.get_file()

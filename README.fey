@@ -59,53 +59,60 @@ Pre compiled binaries for Windows and Linux can be found on the itch.io page:
 
   V. SVG Compatibility
 
-Because this software is made with Godot, which uses ThorVG for SVG rendering,
-the specification for what color features are supported is limited to what
-ThorVG implements.
+This software is made with Godot-mono, and uses Svg.Skia for SVG rendering.
 
-They're currently following the [SVG Tiny 1.2 specification]
-(https://www.w3.org/TR/SVGTiny12/), with [this list of supported features]
-(https://github.com/thorvg/thorvg/wiki/SVG-Support).
-
-Some features that are supported are undocumented, and where those pertain to
-this tool, they will be listed here.
+They're currently following the [SVG Full 1.1 specification]
+(https://www.w3.org/TR/SVG11/), with the [SVG 2 static subset]
+(https://www.w3.org/TR/SVG2/).
 
 
   V.i. Supported Color/Opacity Attributes
 
+- color
+- opacity
 - fill, fill-opacity
 - stroke, stroke-opacity
 - stop-color, stop-opacity
+- flood-color, flood-opacity
+- lighting-color
+- background-color
 
 
   V.ii. Supported Color Formats
 
-*/Alpha Note/*
-ThorVG does not currently support alpha channels in color formats. If a color
-shows up as BLACK in the preview, it is likely that the color format is not
-supported.
+[Supported color documentation](https://www.w3.org/TR/css-color-3/)
 
 - #rgb:
   where r, g, b are in [0-9a-fA-F]
 
+- #rgba:
+  where r, g, b, a are in [0-9a-fA-F]
+
 - #rrggbb:
   where r, g, b are in [0-9a-fA-F]
+
+- #rrggbbaa:
+  where r, g, b, a are in [0-9a-fA-F]
 
 - rgb(rrr, ggg, bbb):
   where rrr, ggg, bbb are in [0-255]
 
+- rgba(rrr, ggg, bbb, aaa):
+  where rrr, ggg, bbb are in [0-255]; aaa is in [0.0-1.0]
+
 - rgb(R%, G%, B%):
   where R, G, B are in [0-100]
+
+- rgba(R%, G%, B%, A):
+  where R, G, B are in [0-100]; A is in [0.0-1.0]
 
 - hsl(h, s%, l%):
   where h is in [0-360]; s and l are in [0-100]
 
-  */Undocumented ThorVG feature/*
-  this color function is not in Tiny 1.2 Spec.
+- hsla(h, s%, l%, a):
+  where h is in [0-360]; s and l are in [0-100]; a is in [0.0-1.0]
 
 - X11 Color keyword:
-  */Undocumented ThorVG feature/*
-  Only a subset of this list is in Tiny 1.2 Spec, this full list is not.
 
   # ['keyword', '#rrggbb', [rrr, ggg, bbb]]
   [

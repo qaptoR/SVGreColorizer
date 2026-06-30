@@ -109,8 +109,8 @@ func __get_scale_factor(file_path_ :String) -> float:
 
 
 func __update_views (svg_ :String, frame_ :ColorRect, scale_ :float) -> void:
-    var _image_ := Image.new()
-    if _image_.load_svg_from_string(svg_, scale_):
+    var _image_ :Image = SvgLoader.load_from_string(svg_, scale_)
+    if _image_ == null:
         MessageLogger.error(
             'Failed to load image from string:\n%s' %svg_,
             get_script().resource_path.get_file()
