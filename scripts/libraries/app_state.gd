@@ -19,7 +19,7 @@ static var app_data :AppData
 
 static func initialize() -> void:
     app_data = load_settings(GC.SETTINGS_PATH)
-    if app_data == null: 
+    if app_data == null:
         MessageLogger.warn(
             'Failed to load user settings. Generating defaults',
             'app_state.gd'
@@ -72,8 +72,9 @@ static func use_preview_data(
             if _match_ == null: continue
 
             var _is_color_: bool = _Attribute == 'color'
-            var _insert_value_: String = ('#' + _attr_data_.new.to_html(_attr_data_.alpha)) \
-                if _is_color_ else str(_attr_data_.new)
+            var _insert_value_: String = Colorist.color_to_str(
+                _attr_data_.new, _attr_data_.alpha, _attr_data_.format
+                ) if _is_color_ else str(_attr_data_.new)
             var _diff_ :int = _insert_value_.length() - _attr_data_.value.length()
             _edits_.append([_match_.get_end(1), _match_.get_start(2), _insert_value_])
 

@@ -191,6 +191,8 @@ static func _register_value(
         if !color_set.has(_parsed_value_.value): color_set[_parsed_value_.value] = []
         if !color_set[_parsed_value_.value].has(i_): color_set[_parsed_value_.value].append(i_)
         _stored_value_['alpha'] = _parsed_value_.alpha
+        _stored_value_['format'] = _parsed_value_.format
+        _stored_value_['keyword'] = _parsed_value_.keyword
 
     for _Set in GC.ATTRIBUTE_SETS.keys():
         if not _attribute_ in GC.ATTRIBUTE_SETS[_Set]: continue
@@ -214,30 +216,37 @@ static func __get_color_value (value_ :String) -> Dictionary:
             var _values_: Array[float] = []
 
             for _I in range(_matches_.size()):
-                var num = _matches_[_I].get_string(1).to_float()
-                var is_percent = _matches_[_I].get_string(2) == "%"
-                num = clamp(num, 0.0, 100.0) if is_percent else clamp(num, 0.0, 255.0 if _is_rgb_ else 360.0)
+                var _num_ = _matches_[_I].get_string(1).to_float()
+                var _is_percent_ = _matches_[_I].get_string(2) == "%"
+                _num_ = clamp(_num_, 0.0, 100.0) if _is_percent_ else clamp(_num_, 0.0, 255.0 if _is_rgb_ else 360.0)
 
                 if _is_hsl_: match _I:
-                    0: _values_.append(num)
-                    1, 2: _values_.append(num / 100.0)
-                    _: _values_.append(num / 100.0 if is_percent else num)
+                    0: _values_.append(_num_)
+                    1, 2: _values_.append(_num_ / 100.0)
+                    _: _values_.append(_num_ / 100.0 if _is_percent_ else _num_)
 
                 else: match _I:
-                    0, 1, 2: _values_.append(num / 100.0 if is_percent else num / 255.0)
-                    _: _values_.append(num / 100.0 if is_percent else num)
+                    0, 1, 2: _values_.append(_num_ / 100.0 if _is_percent_ else _num_ / 255.0)
+                    _: _values_.append(_num_ / 100.0 if _is_percent_ else _num_)
 
             var _has_alpha_ :bool = _values_.size() > 3
             if !_has_alpha_: _values_.append(1.0)
             _result_['alpha'] = _has_alpha_
 
-            _result_['value'] = __hsl_to_color(_values_[0], _values_[1], _values_[2], _values_[3]) \
+            _result_['value'] = Colorist.hsl_to_color(_values_[0], _values_[1], _values_[2], _values_[3]) \
                 if _is_hsl_ else Color(_values_[0], _values_[1], _values_[2], _values_[3])
+
+            _result_['format'] = GE.ColorFormat.HSL if _is_hsl_ else GE.ColorFormat.RGB_PERC \
+                    if value_.contains('%') else GE.ColorFormat.RGB_INT
+
+            _result_['keyword'] = ""
         return _result_
 
     if Color.html_is_valid(value_): return {
         value = Color(value_),
-        alpha = value_.length() in [9, 5], # includes alpha if length is 9 (#RRGGBBAA) or 5 (#RGBA)
+        alpha = value_.length() in [9, 5],
+        format = GE.ColorFormat.HEX,
+        keyword = "",
     }
 
     match value_:
@@ -248,18 +257,9 @@ static func __get_color_value (value_ :String) -> Dictionary:
     return {
         value = Color(value_),
         alpha = false,
+        format = GE.ColorFormat.KEYWORD,
+        keyword = value_,
     }
-
-
-static func __hsl_to_color(h: float, s: float, l: float, a: float = 1.0) -> Color:
-    h = clamp(h, 0.0, 360.0)
-    s = clamp(s, 0.0, 1.0)
-    l = clamp(l, 0.0, 1.0)
-    var ap :float = s * min(l, 1.0 - l)
-    var f :Callable = func(n :float) -> float:
-        var k :float = fmod(n + (h / 30.0), 12.0)
-        return l - ap * max(-1.0, min(k - 3.0, 9.0 - k, 1.0))
-    return Color(f.call(0.0), f.call(8.0), f.call(4.0), a)
 
 
 static func __get_float_value (value_ :String) -> Dictionary:

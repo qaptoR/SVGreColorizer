@@ -117,6 +117,7 @@ func update_tree_view(coll_ :Dictionary, list_ :Array, group_ :Dictionary, dir_ 
         'color': {
             'org': group_.color,
             'new': group_.color,
+            'keyword': '',
         },
         'unchanged': true,
         'is_queued': false,
@@ -198,6 +199,8 @@ func __set_color(item_ :TreeItem, data_ :Dictionary, offset_ :int):
         'attribute': data_.attribute,
         'alpha': data_.alpha,
         'css': data_.css,
+        'format': data_.format,
+        'keyword': data_.keyword,
     }
     _data_['node'] = data_.node_id
     _data_['offset'] = offset_

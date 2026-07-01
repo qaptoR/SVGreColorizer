@@ -80,6 +80,82 @@ static func sort_color_list(color_list_ :Array) -> Array:
     return color_list_
 
 
+static func hsl_to_color(h: float, s: float, l: float, a: float = 1.0) -> Color:
+    h = clamp(h, 0.0, 360.0)
+    s = clamp(s, 0.0, 1.0)
+    l = clamp(l, 0.0, 1.0)
+    var ap :float = s * min(l, 1.0 - l)
+    var f :Callable = func(n :float) -> float:
+        var k :float = fmod(n + (h / 30.0), 12.0)
+        return l - ap * max(-1.0, min(k - 3.0, 9.0 - k, 1.0))
+    return Color(f.call(0.0), f.call(8.0), f.call(4.0), a)
+
+
+static func color_to_hsl(color_ :Color) -> Dictionary:
+    var r :float = color_.r
+    var g :float = color_.g
+    var b :float = color_.b
+    var a :float = color_.a
+
+    var max_val :float = max(r, g, b)
+    var min_val :float = min(r, g, b)
+    var h :float = 0.0
+    var s :float = 0.0
+    var l :float = (max_val + min_val) / 2.0
+
+    var c :float = max_val - min_val
+    if c > 0.0: match max_val:
+        r: h = 60.0 * fmod(((g - b) / c), 6.0)
+        g: h = 60.0 * (((b - r) / c) + 2.0)
+        b: h = 60.0 * (((r - g) / c) + 4.0)
+
+    if 0.0 < l and l < 1.0: s = c / (1.0 - abs(2.0 * l - 1.0))
+
+    return {'h': h, 's': s, 'l': l, 'a': a}
+
+
+static func color_to_str(
+    color_ :Color,
+    inc_alpha_ :bool = false,
+    format_ :int = GE.ColorFormat.HEX
+) -> String:
+    match format_:
+        GE.ColorFormat.HEX:
+            return '#' + color_.to_html(inc_alpha_)
+        GE.ColorFormat.RGB_INT:
+            return "rgb%s(%d, %d, %d%s)" % [
+                'a' if inc_alpha_ else "",
+                int(color_.r * 255.0),
+                int(color_.g * 255.0),
+                int(color_.b * 255.0),
+                ", %.2f" %color_.a if inc_alpha_ else ""
+            ]
+        GE.ColorFormat.RGB_PERC:
+            return "rgb%s(%.1f%%, %.1f%%, %.1f%%%s)" % [
+                'a' if inc_alpha_ else "",
+                color_.r * 100.0,
+                color_.g * 100.0,
+                color_.b * 100.0,
+                ", %.2f" %color_.a if inc_alpha_ else ""
+            ]
+        GE.ColorFormat.HSL:
+            var _hsl_ = color_to_hsl(color_)
+            return "hsl%s(%.1f, %.1f%%, %.1f%%%s)" % [
+                'a' if inc_alpha_ else "",
+                _hsl_.h,
+                _hsl_.s * 100.0,
+                _hsl_.l * 100.0,
+                ", %.2f" %_hsl_.a if inc_alpha_ else ""
+            ]
+        GE.ColorFormat.KEYWORD:
+            var _str_ = GC.COLOR_KEYWORDS.find_key('#' + color_.to_html(false))
+            if _str_ == null: _str_ = '#' + color_.to_html(inc_alpha_)
+            return _str_
+        _: return "none"
+
+
+
+
 static func update_preview_color(app_data_ :AppData) -> void:
     for _Preview in preview_frame_references:
         _Preview.color = app_data_.color_state.preview_color

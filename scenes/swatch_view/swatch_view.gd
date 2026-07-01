@@ -83,6 +83,7 @@ func import_palette(path_ :String) -> void:
     while palette.get_position() < palette.get_length():
         var color = palette.get_line()
         if !color.is_valid_html_color(): continue
+        if not color.begins_with("#"): color = "#" + color
         add_new_color(color.to_lower())
 
     palette.close()
